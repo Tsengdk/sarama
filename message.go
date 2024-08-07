@@ -41,6 +41,7 @@ func (cc CompressionCodec) String() string {
 		"snappy",
 		"lz4",
 		"zstd",
+		"gzip2",
 	}[int(cc)]
 }
 
@@ -52,6 +53,7 @@ func (cc *CompressionCodec) UnmarshalText(text []byte) error {
 		"snappy": CompressionSnappy,
 		"lz4":    CompressionLZ4,
 		"zstd":   CompressionZSTD,
+		"gzip2":  CompressionGzipRefactor,
 	}
 	codec, ok := codecs[string(text)]
 	if !ok {
