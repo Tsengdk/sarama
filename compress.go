@@ -116,54 +116,58 @@ func compress(cc CompressionCodec, level int, data []byte) ([]byte, error) {
 		return data, nil
 	case CompressionGZIP:
 		var (
-			err    error
-			buf    bytes.Buffer
+			err error
+			//buf    bytes.Buffer
 			writer *gzip.Writer
 		)
+
+		buf := bufPool.Get().(*bytes.Buffer)
+		defer bufPool.Put(buf)
+		buf.Reset()
 
 		switch level {
 		case CompressionLevelDefault:
 			writer = gzipWriterPool.Get().(*gzip.Writer)
 			defer gzipWriterPool.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 1:
 			writer = gzipWriterPoolForCompressionLevel1.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel1.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 2:
 			writer = gzipWriterPoolForCompressionLevel2.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel2.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 3:
 			writer = gzipWriterPoolForCompressionLevel3.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel3.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 4:
 			writer = gzipWriterPoolForCompressionLevel4.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel4.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 5:
 			writer = gzipWriterPoolForCompressionLevel5.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel5.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 6:
 			writer = gzipWriterPoolForCompressionLevel6.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel6.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 7:
 			writer = gzipWriterPoolForCompressionLevel7.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel7.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 8:
 			writer = gzipWriterPoolForCompressionLevel8.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel8.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		case 9:
 			writer = gzipWriterPoolForCompressionLevel9.Get().(*gzip.Writer)
 			defer gzipWriterPoolForCompressionLevel9.Put(writer)
-			writer.Reset(&buf)
+			writer.Reset(buf)
 		default:
-			writer, err = gzip.NewWriterLevel(&buf, level)
+			writer, err = gzip.NewWriterLevel(buf, level)
 			if err != nil {
 				return nil, err
 			}
